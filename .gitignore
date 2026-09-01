@@ -10,3 +10,6 @@ wheels/
 .venv
 .env
 **/.env
+
+# Claude Code local session data
+**/.claude/logs/
