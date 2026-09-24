@@ -13,3 +13,6 @@ wheels/
 
 # Claude Code local session data
 **/.claude/logs/
+
+# Local SQLite test databases created while running notebooks
+*.db
