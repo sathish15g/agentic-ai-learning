@@ -49,9 +49,15 @@ def get_capital(country: str) -> str:
 
 
 def calculator(expression: str) -> str:
+    """Only digits, operators, and parentheses are allowed through before
+    eval() ever runs, so arbitrary code can't be smuggled in via a string
+    the model hands back.
+    """
+    allowed_characters = set("0123456789+-*/(). ")
+    if not set(expression) <= allowed_characters:
+        return f"Rejected -- disallowed characters in {expression!r}."
     try:
-        result = eval(expression)
-        return str(result)
+        return str(eval(expression))  # noqa: S307 -- input whitelisted above
     except Exception as e:
         return str(e)
 
@@ -137,7 +143,7 @@ def get_client_and_model():
                 api_key=os.environ["GROQ_API_KEY"],
                 base_url="https://api.groq.com/openai/v1",
             ),
-            "llama-3.3-70b-versatile",
+            "openai/gpt-oss-120b",
         )
 
     if os.environ.get("OPENROUTER_API_KEY"):
@@ -149,7 +155,7 @@ def get_client_and_model():
                 api_key=os.environ["OPENROUTER_API_KEY"],
                 base_url="https://openrouter.ai/api/v1",
             ),
-            "openrouter/auto",
+            "openrouter/free",
         )
 
     if os.environ.get("OPENAI_API_KEY"):
@@ -284,32 +290,32 @@ if __name__ == "__main__":
     chat()
 
 """
-(agentic-ai-learning) sathish@sathish-MS-7E06:/media/sathish/New Volume/Learnings/agentic-ai-learning/_03_Agents in Python/Project 0$ python _06_project_zero_agent.py
+$ python _06_project_zero_agent.py
 ============================================================
 Project Zero Agent
 Type 'exit' to quit
 ============================================================
 
-You : what is weather of tokyo ?
-Using OpenRouter
+You : what is weather of tokyo?
+Using Groq
 
 Tool Called : get_weather
 
-Tool id : call_x3EznceKWMCav39HIJ3ls9M2
+Tool id : fc_b59dc92f-d2d1-4d66-9066-4d2ff3e572c6
 Arguments   : {'city': 'Tokyo'}
 Result      : Weather in Tokyo:
 Temperature : 22°C
 Conditions  : Partly Cloudy
 
 
-Agent: Tokyo is currently **22°C (72°F)** and **partly cloudy**.
+Agent: Here's the latest weather for Tokyo: 22°C, partly cloudy.
 
 You : what is capital of India?
-Using OpenRouter
+Using Groq
 
 Tool Called : get_capital
 
-Tool id : call_IQxsF01cTY9te2LKkXDX5swS
+Tool id : fc_cb3ba726-d896-4439-8643-a2e8e6d5feac
 Arguments   : {'country': 'India'}
 Result      : New Delhi
 
@@ -317,15 +323,16 @@ Result      : New Delhi
 Agent: The capital of India is **New Delhi**.
 
 You : calculate (1+2)*45
-Using OpenRouter
+Using Groq
 
 Tool Called : calculator
 
-Tool id : call_RNd4mQUBVdTzqKumjC4qiNVk
+Tool id : fc_e264897d-7e41-4ad6-b1c2-42e4e52b97b1
 Arguments   : {'expression': '(1+2)*45'}
 Result      : 135
 
 
-Agent: **135**
+Agent: The result of (1+2) * 45 is **135**.
 
+You : exit
 """

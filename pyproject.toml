@@ -23,4 +23,10 @@ dependencies = [
     "langchain-chroma>=1.1.0",
     "chromadb>=1.5.9",
     "pypdf>=6.16.1",
+    "langchain-tavily>=0.2.18",
+]
+
+[tool.uv.workspace]
+members = [
+    "_08_MCP/my-first-mcp/mcp-warmup",
 ]

@@ -129,7 +129,7 @@ def get_client_and_model():
     if os.environ.get("GROQ_API_KEY"):
         return (
             OpenAI(api_key=os.environ["GROQ_API_KEY"], base_url="https://api.groq.com/openai/v1"),
-            "llama-3.3-70b-versatile",
+            "openai/gpt-oss-120b",
         )
     if os.environ.get("OPENROUTER_API_KEY"):
         return (
